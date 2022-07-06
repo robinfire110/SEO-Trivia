@@ -34,7 +34,7 @@ class TriviaGame:
         #Get Questions
         print(f"Topic: {self.topic['name']} | Difficulty: {self.difficulty}")
         print("---------------------------------------------------")
-        self.data = self.get_data(self.topic, self.difficulty)
+        self.data = self.get_data()
         self.question_answer_dict = {}
         self.list_of_questions = []
 
@@ -106,14 +106,14 @@ class TriviaGame:
                         self.params[6], self.params[7], self.params[8], self.params[9], self.params[10],
                         self.params[11], self.params[12], self.params[13]))
 
-    def get_data(self, topic, difficulty):
+    def get_data(self):
         url = "https://opentdb.com/api.php?amount=10"
 
         #Add Parameters
-        if topic['id'] != 0:
-            url += (f"&category={topic['id']}")
-        if difficulty != "Any Difficulty":
-            url += (f"&difficulty={difficulty.lower()}")
+        if self.topic['id'] != 0:
+            url += (f"&category={self.topic['id']}")
+        if self.difficulty != "Any Difficulty":
+            url += (f"&difficulty={self.difficulty.lower()}")
 
         #Get Questions
         response = requests.get(url)
