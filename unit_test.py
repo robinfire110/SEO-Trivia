@@ -7,5 +7,5 @@ class unitTest(unittest.TestCase):
         pass
         
     def test_replace_invalid_characters(self):
-        self.assertEquals(replace_invalid_characters("This is a &quot;test&#039;"), "This is a \"test'")
-        self.assertEquals(replace_invalid_characters("This shouldn't change"), "This shouldn't change")
+        self.assertEqual(replace_invalid_characters("This is a &quot;test&#039;"), "This is a \"test'")
+        self.assertEqual(replace_invalid_characters("This shouldn't change"), "This shouldn't change")
