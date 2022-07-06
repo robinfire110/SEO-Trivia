@@ -11,7 +11,28 @@ import re
 
 class TriviaGame:
     def __init__(self):
-        self.data = self.get_data()
+        #Start Game
+        print("Welcome to the Amazing Blazing Trivia Extravaganza!")
+        print("---------------------------------------------------")
+        
+        #Select Topic
+        print("Topic Selection")
+        print("---------------------------------------------------")
+        self.topic = self.get_topic()
+        #print(self.topic)
+        print("---------------------------------------------------")
+        
+        #Select Difficulty
+        print("Difficulty Selection")
+        print("---------------------------------------------------")
+        self.difficulty = self.get_difficulty()
+        #print(self.difficulty)
+        print("---------------------------------------------------")
+
+        #Get Questions
+        print(f"Topic: {self.topic['name']} | Difficulty: {self.difficulty}")
+        print("---------------------------------------------------")
+        self.data = self.get_data(self.topic, self.difficulty)
         self.question_answer_dict = {}
         self.list_of_questions = []
 
@@ -26,6 +47,10 @@ class TriviaGame:
         self.start_time = time.time()
         self.is_correct_list = []
         for question in self.question_answer_dict:
+            #Header
+            print("\n---------------------------------------------------")
+            print(f"Question {len(self.is_correct_list)+1}")
+            print("---------------------------------------------------\n")
             # Print Question
             print(question)
             # Display Answers
@@ -38,24 +63,70 @@ class TriviaGame:
                     player_answer = int(input("Please input answer number: "))
                     if self.question_answer_dict[question]["answers"][player_answer] == self.question_answer_dict[question]["correct_answer"]:
                         self.is_correct_list.append(1)
-                        print("Correct\n")
+                        print("\nCORRECT!")
                     else:
                         self.is_correct_list.append(0)
-                        print("Wrong :(\n")
+                        print("\nINCORRECT!\nThe correct answer was {}".format(self.question_answer_dict[question]["correct_answer"]))
                     break
                 except TypeError:
                     print("Not an integer. Please try again")
                 except:
                     print("Answer out of range. Please try again")
 
-                    # Run
 
 
 
-    def get_data(self):
-        response = requests.get("https://opentdb.com/api.php?amount=10")
+    def get_data(self, topic, difficulty):
+        url = "https://opentdb.com/api.php?amount=10"
+
+        #Add Parameters
+        if topic['id'] != 0:
+            url += (f"&category={topic['id']}")
+        if difficulty != "Any Difficulty":
+            url += (f"&difficulty={difficulty.lower()}")
+
+        #Get Questions
+        response = requests.get(url)
         data = response.json()
         return data
+
+    def get_topic(self):
+        topic_list = (requests.get("https://opentdb.com/api_category.php").json())['trivia_categories']
+        topic_list.insert(0, {'id': 0, 'name': 'Any Topic'}) #Add any topic to the beginning
+        topic_length = len(topic_list)
+        for index in range(topic_length):
+            print(f"{index+1}. {topic_list[index]['name']}")
+        
+        #Loop until they select a topic
+        while True:
+            try:
+                topic_selection = input(f"Please select a topic (1-{topic_length}): ")
+                topic_selection = int(topic_selection)
+                if topic_selection > 0 and topic_selection <= topic_length:
+                    return topic_list[topic_selection-1]
+                    break
+                else:
+                    print(f"Please select a number within range! ")
+            except:
+                print("Not an integer. Please try again")
+
+    def get_difficulty(self):
+        difficulty_list = ["Any Difficulty", "Easy", "Medium", "Hard"]
+        for index in range(len(difficulty_list)):
+            print(f"{index+1}. {difficulty_list[index]}")
+        
+        #Loop until they select difficulty
+        while True:
+            try:
+                difficutly_selection = input("Please select difficulty (1-4): ")
+                difficutly_selection = int(difficutly_selection)
+                if difficutly_selection > 0 and difficutly_selection <= 4:
+                    return difficulty_list[difficutly_selection-1]
+                    break
+                else:
+                    print(f"Please select a number within range! ")
+            except:
+                print("Not an integer. Please try again")
 
     # Replace characters
     def replace_invalid_characters(self, string):
