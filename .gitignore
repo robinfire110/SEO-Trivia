@@ -1,2 +1,5 @@
 #Ignore the database file
 *.db
+.coverage
+htmlcov/
+__pycache__/
