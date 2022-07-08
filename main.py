@@ -164,6 +164,7 @@ class TriviaGame:
         string = string.replace("&quot;", "\"")
         string = string.replace("&amp;", "&")
         string = string.replace("&shy;", "-")
+        string = string.replace("&eacute;", "é")
         return string
 
     # Display Question and Answers (returns list of answers)
@@ -205,14 +206,14 @@ while run:
 
     #Play Again?
     while True:
-        again = input("Would you like to play again? (y/n): ")
-        if again == "n":
+        again = input("Would you like to play again? (Y/N): ")
+        if again.lower() == "n":
             run = False
             os.system("clear")
             print("Thanks for playing!")
             break
-        elif again != "y":
-            print("Please input y or n.")
+        elif again.lower() != "y":
+            print("Please input Y or N.")
         else:
             break
 
